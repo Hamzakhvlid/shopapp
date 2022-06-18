@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 
 class CartItem {
+   late Key newKey ;
   late String id;
   late String title;
   late int quantity;
@@ -32,7 +33,7 @@ class Cart with ChangeNotifier {
   }
 
   void removeItem(ID) {
-    _items.removeWhere((key, value) => ID == value.title);
+    _items.removeWhere((key, value) => ID == value.newKey);
     notifyListeners();
   }
 

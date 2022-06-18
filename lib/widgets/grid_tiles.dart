@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopapp/providers/carts.dart';
 import 'package:shopapp/providers/product.dart';
-import 'package:shopapp/providers/products.dart';
 import 'package:shopapp/screens/product_detail_screen.dart';
 
+// ignore: use_key_in_widget_constructors
 class Gridtile extends StatefulWidget {
   @override
   State<Gridtile> createState() => _GridtileState();
 }
 
 class _GridtileState extends State<Gridtile> {
+  bool undo = true;
   void doNavigation(BuildContext ctx, var data) {
     Navigator.of(ctx)
         .pushNamed(ProductDetailScreen.DetailScreen, arguments: data);
@@ -19,16 +20,15 @@ class _GridtileState extends State<Gridtile> {
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context);
-    final cart = Provider.of<Cart>(context,listen: false);
-    print(product.isFavorite);
-    print("-----------------------");
+    final cart = Provider.of<Cart>(context, listen: false);
+
     return Container(
-      padding: EdgeInsets.all(5),
+      padding: const EdgeInsets.all(5),
       child: ClipRRect(
           borderRadius: BorderRadius.circular(15),
           child: InkWell(
             onTap: () => doNavigation(context, product.title),
-            splashColor: Color.fromARGB(255, 193, 27, 27),
+            splashColor: const Color.fromARGB(255, 193, 27, 27),
             child: GridTile(
                 child: Image.network(product.imageUrl, fit: BoxFit.cover),
                 footer: GridTileBar(
@@ -43,9 +43,24 @@ class _GridtileState extends State<Gridtile> {
                           : Icons.favorite_border),
                       onPressed: () => product.toggleButton()),
                   backgroundColor: Colors.black87,
-                  trailing: IconButton(icon: Icon(Icons.shopping_cart),onPressed: ()=>
-                  cart.addItem(product.id, product.price, product.title)
-                  ),
+                  trailing: IconButton(
+                      icon: const Icon(Icons.shopping_cart),
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text('Your item is aded succesfully'),
+                            duration: Duration(seconds: 2),
+                            action: SnackBarAction(
+                                label: 'udno',
+                                onPressed: () {
+                                  undo = false;
+                                })));
+
+                        Future.delayed(Duration(seconds: 3), () {
+                          if (undo)
+                            cart.addItem(
+                                product.id, product.price, product.title);
+                        });
+                      }),
                 )),
           )),
     );

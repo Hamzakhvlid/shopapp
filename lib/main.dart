@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopapp/providers/carts.dart';
-import 'package:shopapp/providers/product.dart';
+
 import 'package:shopapp/screens/cart_screen.dart';
+import 'package:shopapp/screens/form_screen.dart';
 import 'package:shopapp/screens/grid_screen.dart';
+import 'package:shopapp/screens/manage_product.dart';
 import 'package:shopapp/screens/product_detail_screen.dart';
 import 'providers/products.dart';
 
@@ -46,11 +48,13 @@ class _MyAppState extends State<MyApp> {
         )
         
         ),
-        initialRoute: GridScreen.girdScreen,
+        initialRoute: FormScreen.formScreen,
         routes: {
           GridScreen.girdScreen:(context) => GridScreen(),
           ProductDetailScreen.DetailScreen:(context) => ProductDetailScreen(),
-         CartScreen.routeName:(context) => CartScreen()
+         CartScreen.routeName:(context) => CartScreen(),
+         ManageProduct.manageProduct:(context) => ManageProduct(),
+         FormScreen.formScreen:(context) => FormScreen(),
         },
       ),
     );

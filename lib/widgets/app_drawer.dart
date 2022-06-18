@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopapp/screens/cart_screen.dart';
 import 'package:shopapp/screens/grid_screen.dart';
+import 'package:shopapp/screens/manage_product.dart';
 import 'package:shopapp/screens/product_detail_screen.dart';
 
 class AppDrawer extends StatefulWidget {
@@ -34,15 +35,17 @@ class _MyWidgetState extends State<AppDrawer> {
               Navigator.of(context).pushNamed(GridScreen.girdScreen);
             },
           ),
+        
           ListTile(
-            title: const Text('Cart'),
-            trailing: Icon(Icons.shopping_cart_checkout),
+            title: const Text('Manage Product'),
+            trailing: Icon(Icons.precision_manufacturing_outlined),
             onTap: () {
               // Update the state of the app.
               // ...
               Navigator.of(context).pop();
-              Navigator.of(context).pushNamed(CartScreen.routeName);
+              Navigator.of(context).pushNamed(ManageProduct.manageProduct);
             },
+            
           ),
         ],
       ),

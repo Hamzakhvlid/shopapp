@@ -3,14 +3,16 @@ import 'package:provider/provider.dart';
 
 import 'package:shopapp/providers/carts.dart';
 
-class cartItem extends StatelessWidget {
+class cartItem extends StatefulWidget {
   final String id;
   final String productId;
   final double price;
   final int quantity;
   final String title;
+  Key newkey;
 
   cartItem(
+    this.newkey,
     this.id,
     this.productId,
     this.price,
@@ -19,9 +21,34 @@ class cartItem extends StatelessWidget {
   );
 
   @override
+  State<cartItem> createState() => _cartItemState();
+}
+
+class _cartItemState extends State<cartItem> {
+  @override
   Widget build(BuildContext context) {
     return Dismissible(
-      key: ValueKey(id),
+      confirmDismiss: (DismissDirection direction) async {
+        return await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text("Confirm"),
+              content: const Text("Are you sure you wish to delete this item?"),
+              actions: <Widget>[
+                TextButton(
+                    onPressed: () => Navigator.of(context).pop(true),
+                    child: const Text("DELETE")),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: const Text("CANCEL"),
+                ),
+              ],
+            );
+          },
+        );
+      },
+      key: ValueKey(widget.newkey),
       background: Container(
         color: Theme.of(context).errorColor,
         child: Icon(
@@ -38,7 +65,9 @@ class cartItem extends StatelessWidget {
       ),
       direction: DismissDirection.endToStart,
       onDismissed: (direction) {
-        Provider.of<Cart>(context, listen: false).removeItem(productId);
+        setState(() {
+          Provider.of<Cart>(context, listen: false).removeItem(widget.newkey);
+        });
       },
       child: Card(
         margin: EdgeInsets.symmetric(
@@ -52,13 +81,13 @@ class cartItem extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.all(5),
                 child: FittedBox(
-                  child: Text('\$$price'),
+                  child: Text('\$${widget.price}'),
                 ),
               ),
             ),
-            title: Text(title),
-            subtitle: Text('Total: \$${(price * quantity)}'),
-            trailing: Text('$quantity x'),
+            title: Text(widget.title),
+            subtitle: Text('Total: \$${(widget.price * widget.quantity)}'),
+            trailing: Text('${widget.quantity} x'),
           ),
         ),
       ),

@@ -15,8 +15,8 @@ class _ProductsGridState extends State<ProductsGrid> {
     var productData = Provider.of<Products>(context);
 
     var loadedProducts = productData.items;
-    print(productData.items);
-    print(productData.items.length.toString());
+    
+    
 
     return GridView.builder(
       gridDelegate:
